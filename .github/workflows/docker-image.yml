@@ -16,13 +16,12 @@ jobs:
     - uses: actions/checkout@v3
     - name: docker login
       env:
-        DOCKER_USER: ${{secrets.DOCKER_USER}}
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: |
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
+        docker login -u wregen -p $DOCKER_PASSWORD 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/mosquitto-exporter:$(date +%s) --tag ${{secrets.DOCKER_USER}}/mosquitto-exporter:latest 
+      run: docker build . --file Dockerfile --tag wregen/mosquitto-exporter:$(date +%s) --tag wregen/mosquitto-exporter:latest 
     - name: Docker Push
-      run: docker push ${{secrets.DOCKER_USER}}/mosquitto-exporter:$(date +%s)
+      run: docker push wregen/mosquitto-exporter:$(date +%s)
     - name: Docker Push
-      run: docker push ${{secrets.DOCKER_USER}}/mosquitto-exporter:latest
+      run: docker push wregen/mosquitto-exporter:latest
