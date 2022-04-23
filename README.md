@@ -1,16 +1,21 @@
-Mosquitto Exporter
-=============================
+# Mosquitto Exporter
+
 Prometheus exporter for the [Mosquitto MQTT message broker](https://mosquitto.org/).
 
-There is a docker image available:
+All credits goes to (https://github.com/sapcc/mosquitto-exporter):
+
+- Arturo Reuschenbach Puncernau <a.reuschenbach.puncernau@sap.com>
+- Fabian Ruff <fabian.ruff@sap.com>
+
+The solution is just small modification for my own purposes.
+
 ```
 docker run \
-  -p 9234:9234 sapcc/mosquitto-exporter \
+  -p 9234:9234 wregen/mosquitto-exporter \
   --endpoint tcp://mosquitto:1883
 ```
 
-Usage:
-======
+# Usage:
 
 ```
 NAME:
@@ -20,7 +25,7 @@ USAGE:
    mosquitto_exporter [global options] command [command options] [arguments...]
 
 VERSION:
-   0.6.0 (0ac92b5), go1.14.2
+   0.8.1 (763bead), go1.18
 
 AUTHORS:
    Arturo Reuschenbach Puncernau <a.reuschenbach.puncernau@sap.com>
@@ -36,6 +41,8 @@ GLOBAL OPTIONS:
    --pass value, -p value          Password for the User on the Mosquitto message broker [$MQTT_PASS]
    --cert value, -c value          Location of a TLS certificate .pem file for the Mosquitto message broker [$MQTT_CERT]
    --key value, -k value           Location of a TLS private key .pem file for the Mosquitto message broker [$MQTT_KEY]
+   --client-id value, -i value     Client id to be used to connect to the Mosquitto message broker [$MQTT_CLIENT_ID]
+   --config value, -z value        Config in json format (default: "./config.json") [$MQTT_CONFIG]
    --help, -h                      show help
    --version, -v                   print the version
 ```

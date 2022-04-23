@@ -110,6 +110,12 @@ func main() {
 			Value:  "",
 			EnvVar: "MQTT_CLIENT_ID",
 		},
+		cli.StringFlag{
+			Name:   "config,z",
+			Usage:  "Config in json format",
+			Value:  "./config.json",
+			EnvVar: "MQTT_CONFIG",
+		},
 	}
 
 	app.Run(os.Args)
@@ -118,12 +124,33 @@ func main() {
 func runServer(c *cli.Context) {
 	log.Printf("Starting mosquitto_broker %s", versionString())
 
+	var (
+		user string
+		pass string
+		err  error
+	)
+	if c.String("config") != "" {
+		user, pass, err = getConfig(c.String("config"))
+		if err != nil {
+			log.Println("Error: Config not loaded")
+		}
+	}
+
 	opts := mqtt.NewClientOptions()
 	opts.SetCleanSession(true)
 	opts.AddBroker(c.String("endpoint"))
 
 	if c.String("client-id") != "" {
 		opts.SetClientID(c.String("client-id"))
+	}
+
+	// if you have a username  in config you'll need a password with it
+	// config values are overwritten by flags
+	if user != "" {
+		opts.SetUsername(user)
+		if pass != "" {
+			opts.SetPassword(pass)
+		}
 	}
 
 	// if you have a username you'll need a password with it
@@ -190,7 +217,7 @@ func runServer(c *cli.Context) {
 	http.Handle("/metrics", promhttp.Handler())
 	http.HandleFunc("/", serveVersion)
 	log.Printf("Listening on %s...", c.GlobalString("bind-address"))
-	err := http.ListenAndServe(c.GlobalString("bind-address"), nil)
+	err = http.ListenAndServe(c.GlobalString("bind-address"), nil)
 	fatalfOnError(err, "Failed to bind on %s: ", c.GlobalString("bind-address"))
 }
 
