@@ -20,8 +20,8 @@ jobs:
       run: |
         docker login -u wregen -p $DOCKER_PASSWORD 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag wregen/mosquitto-exporter:$(date +%s) --tag wregen/mosquitto-exporter:latest 
+      run: docker build . --file Dockerfile --tag wregen/mosquitto-exporter:$(git describe --tags --long) --tag wregen/mosquitto-exporter:latest 
     - name: Docker Push
-      run: docker push wregen/mosquitto-exporter:$(date +%s)
+      run: docker push wregen/mosquitto-exporter:$(git describe --tags --long)
     - name: Docker Push
       run: docker push wregen/mosquitto-exporter:latest
