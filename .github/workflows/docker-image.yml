@@ -14,16 +14,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Install git
-      run: sudo apt-get install -y git
     - name: docker login
       env:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: |
         docker login -u wregen -p $DOCKER_PASSWORD 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag wregen/mosquitto-exporter:$(git describe --tags --long) --tag wregen/mosquitto-exporter:latest 
+      run: docker build . --file Dockerfile --tag wregen/mosquitto-exporter:$(git rev-parse HEAD | cut -c 1-8) --tag wregen/mosquitto-exporter:latest 
     - name: Docker Push
-      run: docker push wregen/mosquitto-exporter:$(git describe --tags --long)
+      run: docker push wregen/mosquitto-exporter:$(git rev-parse HEAD | cut -c 1-8)
     - name: Docker Push
       run: docker push wregen/mosquitto-exporter:latest
