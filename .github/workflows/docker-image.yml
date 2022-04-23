@@ -14,6 +14,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Install git
+      run: sudo apt-get install -y git
     - name: docker login
       env:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
